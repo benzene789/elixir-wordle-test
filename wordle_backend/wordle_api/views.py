@@ -8,6 +8,11 @@ import random
 class RandomWordView(APIView):
     def get(self, request):
         words = Word.objects.all()
+        if not words.exists():
+            return Response(
+                {"error": "No words found in the database."},
+                status=404
+            )
         random_word = random.choice(words)
         serializer = WordSerializer(random_word)
         return Response(serializer.data)
