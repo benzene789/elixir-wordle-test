@@ -28,3 +28,16 @@ def test_random_word_view(create_words):
     assert "word" in response.data
     # Assert that the word is in the list of valid words
     assert response.data["word"] in ["apple", "brave", "crane"]
+
+
+@pytest.mark.django_db
+def test_random_word_view_no_words(create_words):
+    Word.objects.all().delete()
+
+    client = APIClient()
+
+    # Make a GET request to the RandomWordView
+    url = reverse("random_word")
+    response = client.get(url)
+
+    assert response.status_code == 404
