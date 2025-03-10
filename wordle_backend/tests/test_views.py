@@ -41,3 +41,4 @@ def test_random_word_view_no_words(create_words):
     response = client.get(url)
 
     assert response.status_code == 404
+    assert response.data['error'] == 'No words found in the database.'
