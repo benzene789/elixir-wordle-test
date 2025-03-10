@@ -48,6 +48,8 @@ def test_validate_guess_incorrect():
     ]
 
 
+# Although planned to be validated on front end
+# these tests will make it more robust
 @pytest.mark.django_db
 def test_validate_guess_invalid_length():
     client = APIClient()
@@ -58,6 +60,7 @@ def test_validate_guess_invalid_length():
     response = client.post(url, data, format="json")
 
     assert response.status_code == 400
+    assert response.data['error'] == 'Guess must be 5 characters long.'
 
 
 @pytest.mark.django_db
@@ -69,6 +72,7 @@ def test_validate_guess_missing_data():
     data = {"guess": "apple"}  # Missing correct_word
     response = client.post(url, data, format="json")
 
+    assert response.data['error'] == 'Missing correct_word'
     assert response.status_code == 400
 
 
@@ -82,3 +86,5 @@ def test_validate_guess_non_alphabetic():
     response = client.post(url, data, format="json")
 
     assert response.status_code == 400
+    assert response.data['error'] == \
+        'Guess must contain only alphabetic characters.'

@@ -22,6 +22,22 @@ class ValidateGuessView(APIView):
     def post(self, request):
         guess = request.data.get("guess", "").lower()
         correct_word = request.data.get("correct_word", "").lower()
+        if len(guess) != 5:
+            return Response(
+                {"error": "Guess must be 5 characters long."},
+                status=400
+            )
+        if not guess.isalpha():
+            return Response(
+                {"error": "Guess must contain only alphabetic characters."},
+                status=400
+            )
+        if correct_word == "":
+            return Response(
+                {"error": "Missing correct_word"},
+                status=400
+            )
+
         feedback = []
 
         for i in range(5):
