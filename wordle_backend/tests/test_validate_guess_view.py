@@ -46,3 +46,39 @@ def test_validate_guess_incorrect():
     assert response.data["feedback"] == [
         "gray", "gray", "gray", "gray", "gray"
     ]
+
+
+@pytest.mark.django_db
+def test_validate_guess_invalid_length():
+    client = APIClient()
+
+    # Test a guess with invalid length
+    url = reverse("validate_guess")
+    data = {"guess": "app", "correct_word": "apple"}
+    response = client.post(url, data, format="json")
+
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_validate_guess_missing_data():
+    client = APIClient()
+
+    # Test a request with missing data
+    url = reverse("validate_guess")
+    data = {"guess": "apple"}  # Missing correct_word
+    response = client.post(url, data, format="json")
+
+    assert response.status_code == 400
+
+
+@pytest.mark.django_db
+def test_validate_guess_non_alphabetic():
+    client = APIClient()
+
+    # Test a guess with non-alphabetic characters
+    url = reverse("validate_guess")
+    data = {"guess": "app1e", "correct_word": "apple"}
+    response = client.post(url, data, format="json")
+
+    assert response.status_code == 400
