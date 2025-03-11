@@ -14,7 +14,7 @@ const Grid: React.FC<GridProps> = ({ guesses, feedback }) => {
           {Array.from({ length: 5 }).map((_, colIndex) => {
             const guess = guesses[rowIndex] || "";
             const letter = guess[colIndex] || "";
-            const color = feedback[rowIndex]?.[colIndex] || "gray";
+            const color = feedback[rowIndex]?.[colIndex];
             return (
               <div
                 key={colIndex}
@@ -23,6 +23,8 @@ const Grid: React.FC<GridProps> = ({ guesses, feedback }) => {
                     ? "bg-green-500 text-white"
                     : color === "yellow"
                     ? "bg-yellow-500 text-white"
+                    : color === "gray"
+                    ? "bg-gray-500 text-white"
                     : "bg-[#242424] text-white"
                 }`}
               >
