@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useGameContext } from "../context/GameContext";
 
 /**
@@ -16,6 +16,27 @@ const Keyboard: React.FC = () => {
   const topRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const middleRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const bottomRow = ["Z", "X", "C", "V", "B", "N", "M"];
+
+  // useEffect to handle physical key presses
+  useEffect(() => {
+    const handlePhysicalKeyPress = (event: KeyboardEvent) => {
+      const key = event.key.toUpperCase();
+      console.log(key);
+
+      // Only handle valid keys (letters, Enter, Backspace)
+      if (/^[A-Z]$/.test(key) || key === "ENTER" || key === "BACKSPACE") {
+        handleKeyPress(key);
+      }
+    };
+
+    // Attach the event listener
+    document.addEventListener("keydown", handlePhysicalKeyPress);
+
+    // Clean up the event listener on unmount
+    return () => {
+      document.removeEventListener("keydown", handlePhysicalKeyPress);
+    };
+  }, [handleKeyPress]);
 
   return (
     <div className="flex flex-col gap-2 mt-4">

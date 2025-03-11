@@ -4,7 +4,7 @@ import Keyboard from "./components/Keyboard";
 import { useGameContext } from "./context/GameContext";
 
 const App = () => {
-  const { chosenWord, isGameOver } = useGameContext();
+  const { chosenWord, isGameOver, guesses } = useGameContext();
 
   return (
     <div className="container flex flex-col justify-center items-center mx-auto mt-[10vh]">
@@ -13,7 +13,7 @@ const App = () => {
       <Keyboard />
       {isGameOver && (
         <div className="mt-4 text-xl font-bold">
-          {chosenWord
+          {guesses[guesses.length - 1] === chosenWord.toUpperCase()
             ? "You win! 🎉"
             : `Game over! The word was: ${chosenWord}`}
         </div>
