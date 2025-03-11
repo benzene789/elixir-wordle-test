@@ -88,3 +88,15 @@ def test_validate_guess_non_alphabetic():
     assert response.status_code == 400
     assert response.data['error'] == \
         'Guess must contain only alphabetic characters.'
+
+
+@pytest.mark.django_db
+def test_validate_guess_word_not_in_database():
+    client = APIClient()
+
+    # Test a guess with a word not in the database
+    url = reverse("validate_guess")
+    data = {"guess": "trial", "correct_word": "apple"}
+    response = client.post(url, data, format="json")
+
+    assert response.status_code == 404
