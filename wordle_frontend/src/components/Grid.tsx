@@ -18,12 +18,12 @@ const Grid: React.FC<GridProps> = ({ guesses, feedback }) => {
             return (
               <div
                 key={colIndex}
-                className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-300 ${
+                className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500 ${
                   color === "green"
                     ? "bg-green-500 text-white"
                     : color === "yellow"
                     ? "bg-yellow-500 text-white"
-                    : "bg-gray-300 text-black"
+                    : "bg-[#242424] text-white"
                 }`}
               >
                 {letter}
