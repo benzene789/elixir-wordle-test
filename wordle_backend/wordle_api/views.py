@@ -1,5 +1,6 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 from wordle_api.models import Word
 from wordle_api.serializers import WordSerializer
 import random
@@ -11,7 +12,7 @@ class RandomWordView(APIView):
         if not words.exists():
             return Response(
                 {"error": "No words found in the database."},
-                status=404
+                status=status.HTTP_404_NOT_FOUND
             )
         random_word = random.choice(words)
         serializer = WordSerializer(random_word)
@@ -25,17 +26,24 @@ class ValidateGuessView(APIView):
         if len(guess) != 5:
             return Response(
                 {"error": "Guess must be 5 characters long."},
-                status=400
+                status=status.HTTP_400_BAD_REQUEST
             )
         if not guess.isalpha():
             return Response(
                 {"error": "Guess must contain only alphabetic characters."},
-                status=400
+                status=status.HTTP_400_BAD_REQUEST
             )
         if correct_word == "":
             return Response(
                 {"error": "Missing correct_word"},
-                status=400
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        # Check if the guess exists in the database
+        if not Word.objects.filter(word=guess).exists():
+            return Response(
+                {"error": "Guess is not in our word list."},
+                status=status.HTTP_400_BAD_REQUEST,
             )
 
         feedback = []
