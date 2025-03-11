@@ -14,7 +14,15 @@ import { fetchRandomWord, validateGuess } from "../services/api";
  *   handleKeyPress: (key: string) => void
  * }} The game state and handlers.
  */
-const useGame = () => {
+const useGame = (): {
+    chosenWord: string;
+    guesses: string[];
+    feedback: string[][];
+    currentGuess: string;
+    isGameOver: boolean;
+    handleGuess: () => void;
+    handleKeyPress: (key: string) => void;
+} => {
   const [chosenWord, setChosenWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string[][]>([]);
