@@ -39,6 +39,19 @@ const Grid: React.FC = (): JSX.Element => {
     }
   }, [feedbackMessage, guesses.length]);
 
+  const getCellColour = (colour: string): string => {
+    switch (colour) {
+      case "green":
+        return "bg-green-500 text-white";
+      case "yellow":
+        return "bg-yellow-500 text-white";
+      case "gray":
+        return "bg-gray-500 text-white";
+      default:
+        return "bg-[#242424] text-white";
+    }
+  }
+
   return (
     <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }).map((_, rowIndex) => {
@@ -48,7 +61,7 @@ const Grid: React.FC = (): JSX.Element => {
           : guesses[rowIndex] || "";
 
           return (
-            <div key={rowIndex} className={`flex gap-2 ${animateRow === rowIndex ? "animate-shake" : ""}`}>
+            <div key={rowIndex} className={`flex gap-2 ${animateRow === rowIndex ? "motion-safe:animate-shake" : ""}`}>
               {Array.from({ length: 5 }).map((_, colIndex) => {
                 const letter = rowLetters[colIndex] || "";
                 const color = feedback[rowIndex]?.[colIndex];
@@ -57,15 +70,8 @@ const Grid: React.FC = (): JSX.Element => {
                 return (
                   <div
                     key={colIndex}
-                    className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500 ${
-                      color === "green"
-                        ? "bg-green-500 text-white"
-                        : color === "yellow"
-                        ? "bg-yellow-500 text-white"
-                        : color === "gray"
-                        ? "bg-gray-500 text-white"
-                        : "bg-[#242424] text-white"
-                    } ${isAnimated ? "animate-pulse" : ""}`}
+                    className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500
+                      ${getCellColour(color)} ${isAnimated ? "motion-safe:animate-pulse" : ""}`}
                   >
                     {letter}
                   </div>
