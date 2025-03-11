@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { JSX, useEffect, useState } from "react";
 import { useGameContext } from "../context/GameContext";
 
 /**
@@ -12,9 +12,10 @@ import { useGameContext } from "../context/GameContext";
  *
  * @returns {JSX.Element} The rendered grid component.
  */
-const Grid: React.FC = () => {
-  const { guesses, feedback, currentGuess } = useGameContext();
+const Grid: React.FC = (): JSX.Element => {
+  const { guesses, feedback, currentGuess, feedbackMessage } = useGameContext();
   const [animateCell, setAnimateCell] = useState<{ row: number; col: number } | null>(null);
+  const [animateRow, setAnimateRow] = useState<number | null>(null);
 
   // Trigger animation when a new letter is typed
   useEffect(() => {
@@ -29,6 +30,15 @@ const Grid: React.FC = () => {
     }
   }, [currentGuess, guesses.length]);
 
+  useEffect(() => {
+    if (feedbackMessage) {
+      const row = guesses.length;
+      setAnimateRow(row);
+      const timeout = setTimeout(() => setAnimateRow(null), 200); // Match animation duration
+      return () => clearTimeout(timeout);
+    }
+  }, [feedbackMessage, guesses.length]);
+
   return (
     <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }).map((_, rowIndex) => {
@@ -37,32 +47,32 @@ const Grid: React.FC = () => {
           ? currentGuess.padEnd(5, " ")
           : guesses[rowIndex] || "";
 
-        return (
-          <div key={rowIndex} className="flex gap-2">
-            {Array.from({ length: 5 }).map((_, colIndex) => {
-              const letter = rowLetters[colIndex] || "";
-              const color = feedback[rowIndex]?.[colIndex];
-              const isAnimated = animateCell?.row === rowIndex && animateCell?.col === colIndex;
+          return (
+            <div key={rowIndex} className={`flex gap-2 ${animateRow === rowIndex ? "animate-shake" : ""}`}>
+              {Array.from({ length: 5 }).map((_, colIndex) => {
+                const letter = rowLetters[colIndex] || "";
+                const color = feedback[rowIndex]?.[colIndex];
+                const isAnimated = animateCell?.row === rowIndex && animateCell?.col === colIndex;
 
-              return (
-                <div
-                  key={colIndex}
-                  className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500 ${
-                    color === "green"
-                      ? "bg-green-500 text-white"
-                      : color === "yellow"
-                      ? "bg-yellow-500 text-white"
-                      : color === "gray"
-                      ? "bg-gray-500 text-white"
-                      : "bg-[#242424] text-white"
-                  } ${isAnimated ? "animate-pulse" : ""}`}
-                >
-                  {letter}
-                </div>
-              );
-            })}
-          </div>
-        );
+                return (
+                  <div
+                    key={colIndex}
+                    className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500 ${
+                      color === "green"
+                        ? "bg-green-500 text-white"
+                        : color === "yellow"
+                        ? "bg-yellow-500 text-white"
+                        : color === "gray"
+                        ? "bg-gray-500 text-white"
+                        : "bg-[#242424] text-white"
+                    } ${isAnimated ? "animate-pulse" : ""}`}
+                  >
+                    {letter}
+                  </div>
+                );
+              })}
+            </div>
+          );
       })}
     </div>
   );

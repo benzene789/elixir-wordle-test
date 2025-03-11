@@ -53,15 +53,13 @@ const useGame = (): {
         setFeedback((prevFeedback) => [...prevFeedback, newFeedback]);
         setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
 
-        console.log(newFeedback);
-
         // Check if the game is over
         if (newFeedback.every((color: string) => color === "green")) {
           setIsGameOver(true);
         } else if (guesses.length + 1 === 6) {
           setIsGameOver(true);
         }
-        
+        setCurrentGuess("");
       } catch (err) {
         // Handle unexpected errors
         if (axios.isAxiosError(err)) {
@@ -74,9 +72,10 @@ const useGame = (): {
           // Fallback for unknown error types
           setFeedbackMessage("An unknown error occurred.");
         }
+        
       } finally {
-        // Clear the current guess
-        setCurrentGuess("");
+        // Reset the feedback message after a short delay
+        setTimeout(() => setFeedbackMessage(""), 2000);
       }
     }
   };
