@@ -1,8 +1,9 @@
-import React, { useEffect } from "react";
+import React, { JSX, useEffect } from "react";
 import { useGameContext } from "../context/GameContext";
 
 /**
  * A keyboard component that allows the user to input guesses.
+ * with user feedback for each key.
  * The keyboard is divided into three rows:
  * - Top row: Q W E R T Y U I O P
  * - Middle row: A S D F G H J K L
@@ -10,18 +11,17 @@ import { useGameContext } from "../context/GameContext";
  *
  * @returns {JSX.Element} The rendered keyboard component.
  */
-const Keyboard: React.FC = () => {
-  const { handleKeyPress  } = useGameContext();
+const Keyboard: React.FC = (): JSX.Element => {
+  const { handleKeyPress, guesses, feedback } = useGameContext();
 
   const topRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const middleRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const bottomRow = ["Z", "X", "C", "V", "B", "N", "M"];
 
-  // useEffect to handle physical key presses
+  // Handle physical key presses
   useEffect(() => {
     const handlePhysicalKeyPress = (event: KeyboardEvent) => {
       const key = event.key.toUpperCase();
-      console.log(key);
 
       // Only handle valid keys (letters, Enter, Backspace)
       if (/^[A-Z]$/.test(key) || key === "ENTER" || key === "BACKSPACE") {
@@ -29,14 +29,50 @@ const Keyboard: React.FC = () => {
       }
     };
 
-    // Attach the event listener
     document.addEventListener("keydown", handlePhysicalKeyPress);
-
-    // Clean up the event listener on unmount
     return () => {
       document.removeEventListener("keydown", handlePhysicalKeyPress);
     };
   }, [handleKeyPress]);
+
+  // Get the color of a key based on feedback
+  const getKeyColor = (key: string): string => {
+    let bestFeedback = "";
+
+    // Loop through all guesses and their feedback
+    for (let i = 0; i < guesses.length; i++) {
+      const guess = guesses[i];
+      const feedbackForGuess = feedback[i];
+
+      // Find the index of the key in the guess
+      const index = guess.indexOf(key);
+
+      // If the key is in the guess, update the best feedback
+      if (index !== -1) {
+        const color = feedbackForGuess[index];
+        if (color === "green") {
+          bestFeedback = "green";
+          break; // Green is the highest priority, so we can stop
+        } else if (color === "yellow" && bestFeedback !== "green") {
+          bestFeedback = "yellow";
+        } else if (color === "gray" && bestFeedback !== "yellow") {
+          bestFeedback = "gray";
+        }
+      }
+    }
+
+    // Return the corresponding background color
+    if (bestFeedback === "green") {
+      return "bg-green-500";
+    } else if (bestFeedback === "yellow") {
+      return "bg-yellow-500";
+    } else if (bestFeedback === "gray") {
+      return "bg-gray-500";
+    }
+    else {
+      return "bg-gray-100";
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2 mt-4">
@@ -46,7 +82,7 @@ const Keyboard: React.FC = () => {
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
+            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
@@ -59,7 +95,7 @@ const Keyboard: React.FC = () => {
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
+            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
@@ -80,7 +116,7 @@ const Keyboard: React.FC = () => {
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
+            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
