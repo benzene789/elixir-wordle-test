@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGameContext } from "../context/GameContext";
 
 /**
@@ -14,6 +14,20 @@ import { useGameContext } from "../context/GameContext";
  */
 const Grid: React.FC = () => {
   const { guesses, feedback, currentGuess } = useGameContext();
+  const [animateCell, setAnimateCell] = useState<{ row: number; col: number } | null>(null);
+
+  // Trigger animation when a new letter is typed
+  useEffect(() => {
+    if (currentGuess.length > 0) {
+      const row = guesses.length;
+      const col = currentGuess.length - 1;
+      setAnimateCell({ row, col });
+
+      // Reset animation after a short delay
+      const timeout = setTimeout(() => setAnimateCell(null), 200); // Match animation duration
+      return () => clearTimeout(timeout);
+    }
+  }, [currentGuess, guesses.length]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -28,6 +42,7 @@ const Grid: React.FC = () => {
             {Array.from({ length: 5 }).map((_, colIndex) => {
               const letter = rowLetters[colIndex] || "";
               const color = feedback[rowIndex]?.[colIndex];
+              const isAnimated = animateCell?.row === rowIndex && animateCell?.col === colIndex;
 
               return (
                 <div
@@ -40,7 +55,7 @@ const Grid: React.FC = () => {
                       : color === "gray"
                       ? "bg-gray-500 text-white"
                       : "bg-[#242424] text-white"
-                  }`}
+                  } ${isAnimated ? "animate-pulse" : ""}`}
                 >
                   {letter}
                 </div>

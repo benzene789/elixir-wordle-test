@@ -9,5 +9,5 @@ export const fetchRandomWord = async () => {
 
 export const validateGuess = async (guess: string, correctWord: string) => {
   const response = await axios.post(`${API_URL}/validate/`, { guess, correct_word: correctWord });
-  return response.data;
+  return response.data.feedback;
 };

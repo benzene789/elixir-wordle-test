@@ -53,6 +53,8 @@ const useGame = (): {
         setFeedback((prevFeedback) => [...prevFeedback, newFeedback]);
         setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
 
+        console.log(newFeedback);
+
         // Check if the game is over
         if (newFeedback.every((color: string) => color === "green")) {
           setIsGameOver(true);
