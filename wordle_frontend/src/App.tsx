@@ -4,11 +4,12 @@ import Keyboard from "./components/Keyboard";
 import { useGameContext } from "./context/GameContext";
 
 const App = () => {
-  const { chosenWord, isGameOver, guesses } = useGameContext();
+  const { chosenWord, isGameOver, guesses, feedbackMessage } = useGameContext();
 
   return (
     <div className="container flex flex-col justify-center items-center mx-auto mt-[10vh]">
       <h1 className="text-4xl font-bold mb-8">Wordle Clone</h1>
+      {feedbackMessage && <div className="text-red-500 mb-4">{feedbackMessage}</div>}
       <Grid />
       <Keyboard />
       {isGameOver && (

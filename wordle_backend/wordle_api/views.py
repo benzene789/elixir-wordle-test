@@ -23,6 +23,9 @@ class ValidateGuessView(APIView):
     def post(self, request):
         guess = request.data.get("guess", "").lower()
         correct_word = request.data.get("correct_word", "").lower()
+        # Although these three checks are done front end to
+        # prevent users from typing incorrect characters,
+        # it's good to have a belt and braces approach
         if len(guess) != 5:
             return Response(
                 {"error": "Guess must be 5 characters long."},

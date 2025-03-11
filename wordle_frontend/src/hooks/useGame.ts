@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { fetchRandomWord, validateGuess } from "../services/api";
+import axios from "axios";
 
 /**
  * A custom hook to manage the game state.
@@ -11,7 +12,8 @@ import { fetchRandomWord, validateGuess } from "../services/api";
  *   currentGuess: string,
  *   isGameOver: boolean,
  *   handleGuess: () => void,
- *   handleKeyPress: (key: string) => void
+ *   handleKeyPress: (key: string) => void,
+ *   feedbackMessage: string
  * }} The game state and handlers.
  */
 const useGame = (): {
@@ -22,12 +24,14 @@ const useGame = (): {
     isGameOver: boolean;
     handleGuess: () => void;
     handleKeyPress: (key: string) => void;
+    feedbackMessage: string
 } => {
   const [chosenWord, setChosenWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>([]);
   const [feedback, setFeedback] = useState<string[][]>([]);
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
+  const [feedbackMessage, setFeedbackMessage] = useState<string>("");
 
 
   // Fetch a random word when the game starts
@@ -42,16 +46,35 @@ const useGame = (): {
   // Handle guess submission
   const handleGuess = async () => {
     if (currentGuess.length === 5) {
-      const newFeedback = await validateGuess(currentGuess, chosenWord);
-      setGuesses([...guesses, currentGuess]);
-      setFeedback([...feedback, newFeedback]);
-      setCurrentGuess("");
+      try {
+        const newFeedback = await validateGuess(currentGuess, chosenWord);
 
-      // Check if the game is over
-      if (newFeedback.every((color: string) => color === "green")) {
-        setIsGameOver(true);
-      } else if (guesses.length + 1 === 6) {
-        setIsGameOver(true);
+        // Update feedback and guesses
+        setFeedback((prevFeedback) => [...prevFeedback, newFeedback]);
+        setGuesses((prevGuesses) => [...prevGuesses, currentGuess]);
+
+        // Check if the game is over
+        if (newFeedback.every((color: string) => color === "green")) {
+          setIsGameOver(true);
+        } else if (guesses.length + 1 === 6) {
+          setIsGameOver(true);
+        }
+        
+      } catch (err) {
+        // Handle unexpected errors
+        if (axios.isAxiosError(err)) {
+          // Axios error
+          setFeedbackMessage(err.response?.data?.error || "An error occurred.");
+        } else if (err instanceof Error) {
+          // Non-Axios error
+          setFeedbackMessage(err.message || "An unexpected error occurred.");
+        } else {
+          // Fallback for unknown error types
+          setFeedbackMessage("An unknown error occurred.");
+        }
+      } finally {
+        // Clear the current guess
+        setCurrentGuess("");
       }
     }
   };
@@ -90,6 +113,7 @@ const useGame = (): {
     isGameOver,
     handleGuess,
     handleKeyPress,
+    feedbackMessage
   };
 };
 
