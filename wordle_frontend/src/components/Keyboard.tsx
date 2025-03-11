@@ -1,17 +1,18 @@
 import React from "react";
-
-interface KeyboardProps {
-  onKeyPress: (key: string) => void;
-}
+import { useGameContext } from "../context/GameContext";
 
 /**
  * A keyboard component that allows the user to input guesses.
+ * The keyboard is divided into three rows:
+ * - Top row: Q W E R T Y U I O P
+ * - Middle row: A S D F G H J K L
+ * - Bottom row: Enter Z X C V B N M Backspace
  *
- * @param {KeyboardProps} props - The component props.
- * @param {(key: string) => void} props.onKeyPress - The function to call when a key is pressed.
- * @returns {JSX.Element} The rendered keyboard.
+ * @returns {JSX.Element} The rendered keyboard component.
  */
-const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
+const Keyboard: React.FC = () => {
+  const { handleKeyPress  } = useGameContext();
+
   const topRow = ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"];
   const middleRow = ["A", "S", "D", "F", "G", "H", "J", "K", "L"];
   const bottomRow = ["Z", "X", "C", "V", "B", "N", "M"];
@@ -23,7 +24,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
         {topRow.map((key) => (
           <button
             key={key}
-            onClick={() => onKeyPress(key)}
+            onClick={() => handleKeyPress(key)}
             className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
           >
             {key}
@@ -36,7 +37,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
         {middleRow.map((key) => (
           <button
             key={key}
-            onClick={() => onKeyPress(key)}
+            onClick={() => handleKeyPress(key)}
             className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
           >
             {key}
@@ -48,7 +49,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
       <div className="flex gap-2 justify-center">
         {/* Enter Key */}
         <button
-          onClick={() => onKeyPress("ENTER")}
+          onClick={() => handleKeyPress("ENTER")}
           className="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 focus:outline-none"
         >
           Enter
@@ -57,7 +58,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
         {bottomRow.map((key) => (
           <button
             key={key}
-            onClick={() => onKeyPress(key)}
+            onClick={() => handleKeyPress(key)}
             className="px-4 py-2 bg-gray-200 text-black font-bold rounded-lg hover:bg-gray-300 focus:outline-none"
           >
             {key}
@@ -66,7 +67,7 @@ const Keyboard: React.FC<KeyboardProps> = ({ onKeyPress }) => {
 
         {/* Backspace Key */}
         <button
-          onClick={() => onKeyPress("BACKSPACE")}
+          onClick={() => handleKeyPress("BACKSPACE")}
           className="px-6 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 focus:outline-none"
         >
           ⌫
