@@ -6,6 +6,8 @@ export default defineConfig(({ mode }) => {
   // Load environment variables
   const env = loadEnv(mode, process.cwd(), "VITE_");
 
+  console.log(env)
+
   return {
     plugins: [react(), tailwindcss()],
 
@@ -13,7 +15,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         "/api": {
-          target: env.VITE_API_URL || "http://127.0.0.1:8000", // Use environment variable or fallback to localhost
+          target: env.VITE_BACKEND_URL || "http://127.0.0.1:8000", // Use environment variable or fallback to localhost
           changeOrigin: true,
           secure: false,
         },

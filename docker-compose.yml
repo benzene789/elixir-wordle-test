@@ -1,20 +1,19 @@
 version: "3.8"
 
 services:
-  wordle_backend:
+  backend:
     build: ./wordle_backend
-    container_name: django_backend
+    container_name: wordle_backend
     ports:
       - "8000:8000"
     volumes:
       - ./wordle_backend:/app
     environment:
       - DJANGO_SETTINGS_MODULE=wordle_backend.settings
-      - VITE_API_URL=http://backend:8000
 
-  wordle_frontend:
+  frontend:
     build: ./wordle_frontend
-    container_name: vite_frontend
+    container_name: wordle_frontend
     ports:
       - "5173:5173"
     volumes:
@@ -22,3 +21,5 @@ services:
       - /app/node_modules  # Avoid overwriting node_modules
     depends_on:
       - backend
+    environment:
+      - VITE_BACKEND_URL=http://backend:8000
