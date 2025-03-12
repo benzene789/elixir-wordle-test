@@ -21,8 +21,20 @@ RUN pip install --upgrade pip && \
 # Copy the Django project into the container
 COPY . /app/
 
+# Copy the words.txt file
+COPY wordlist.txt /app/wordlist.txt
+
+# Copy the populate_words.py script
+COPY populate_words.py /app/populate_words.py
+
+# Copy the entrypoint script
+COPY entrypoint.sh /app/entrypoint.sh
+
+# Make the entrypoint script executable
+RUN chmod +x /app/entrypoint.sh
+
 # Expose the Django server port
 EXPOSE 8000
 
-# Run the Django development server
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+# Run the entrypoint script
+ENTRYPOINT ["/app/entrypoint.sh"]
