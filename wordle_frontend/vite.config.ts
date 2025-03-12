@@ -6,8 +6,6 @@ export default defineConfig(({ mode }) => {
   // Load environment variables
   const env = loadEnv(mode, process.cwd(), "VITE_");
 
-  console.log(env)
-
   return {
     plugins: [react(), tailwindcss()],
 
