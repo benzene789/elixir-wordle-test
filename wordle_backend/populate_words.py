@@ -1,16 +1,24 @@
 import os
 import django
-from wordle_api.models import Word
+
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "wordle_backend.settings")
+
 django.setup()
 
+from wordle_api.models import Word
 
-words = ["apple", "brave", "crane", "dwarf",
-         "elite", "fairy", "grape", "honey",
-         "igloo", "jolly"]
+file_path = "wordlist.txt"
 
+# Read words from the text file
+with open(file_path, "r") as file:
+    words = [line.strip() for line in file if line.strip()]  # Remove empty lines and whitespace
+
+# Add words to the database
+added_count = 0
 for word in words:
-    Word.objects.create(word=word)
+    if not Word.objects.filter(word=word).exists():  # Check if the word already exists
+        Word.objects.create(word=word)
+        added_count += 1
 
-print("Words added to the database.")
+print(f"{added_count} words added to the database.")
