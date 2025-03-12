@@ -10,6 +10,7 @@ services:
       - ./wordle_backend:/app
     environment:
       - DJANGO_SETTINGS_MODULE=wordle_backend.settings
+      - VITE_API_URL=http://backend:8000
 
   wordle_frontend:
     build: ./wordle_frontend
