@@ -19,12 +19,16 @@ import axios from "axios";
 const useGame = (): {
     chosenWord: string;
     guesses: string[];
+    setGuesses: React.Dispatch<React.SetStateAction<string[]>>;
     feedback: string[][];
+    setFeedback: React.Dispatch<React.SetStateAction<string[][]>>;
     currentGuess: string;
+    setCurrentGuess: React.Dispatch<React.SetStateAction<string>>;
     isGameOver: boolean;
     handleGuess: () => void;
     handleKeyPress: (key: string) => void;
-    feedbackMessage: string
+    feedbackMessage: string;
+    setResetGame: React.Dispatch<React.SetStateAction<boolean>>;
 } => {
   const [chosenWord, setChosenWord] = useState<string>("");
   const [guesses, setGuesses] = useState<string[]>([]);
@@ -32,6 +36,7 @@ const useGame = (): {
   const [currentGuess, setCurrentGuess] = useState<string>("");
   const [isGameOver, setIsGameOver] = useState<boolean>(false);
   const [feedbackMessage, setFeedbackMessage] = useState<string>("");
+  const [resetGame, setResetGame] = useState<boolean>(false)
 
 
   // Fetch a random word when the game starts
@@ -41,7 +46,8 @@ const useGame = (): {
       setChosenWord(word);
     };
     initializeGame();
-  }, []);
+    setIsGameOver(false);
+  }, [resetGame]);
 
   // Handle guess submission
   const handleGuess = async () => {
@@ -109,12 +115,16 @@ const useGame = (): {
   return {
     chosenWord,
     guesses,
+    setGuesses,
     feedback,
+    setFeedback,
     currentGuess,
+    setCurrentGuess,
     isGameOver,
     handleGuess,
     handleKeyPress,
-    feedbackMessage
+    feedbackMessage,
+    setResetGame
   };
 };
 
