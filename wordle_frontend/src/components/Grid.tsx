@@ -52,6 +52,15 @@ const Grid: React.FC = (): JSX.Element => {
     }
   }
 
+  const animateGuess = (colour: string) => {
+    const guessColours = ["green", "yellow", "gray"];
+  
+    if (guessColours.includes(colour)) {
+      return `motion-safe:animate-flip`;
+    }
+    return "";
+  };
+
   return (
     <div className="flex flex-col gap-2">
       {Array.from({ length: 6 }).map((_, rowIndex) => {
@@ -64,14 +73,15 @@ const Grid: React.FC = (): JSX.Element => {
             <div key={rowIndex} className={`flex gap-2 ${animateRow === rowIndex ? "motion-safe:animate-shake" : ""}`}>
               {Array.from({ length: 5 }).map((_, colIndex) => {
                 const letter = rowLetters[colIndex] || "";
-                const color = feedback[rowIndex]?.[colIndex];
+                const colour = feedback[rowIndex]?.[colIndex];
                 const isAnimated = animateCell?.row === rowIndex && animateCell?.col === colIndex;
 
                 return (
                   <div
                     key={colIndex}
                     className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500
-                      ${getCellColour(color)} ${isAnimated ? "motion-safe:animate-pulse" : ""}`}
+                      ${getCellColour(colour)} ${animateGuess(colour)} ${isAnimated ? "motion-safe:animate-pulse" : ""}`}
+                      style={{ animationDelay: `${colIndex * 500}ms` }}
                   >
                     {letter}
                   </div>

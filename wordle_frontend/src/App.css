@@ -7,7 +7,6 @@
         0% {
         transform: scale(1);
         }
-
         50% {
         transform: scale(1.1);
         }
@@ -35,4 +34,26 @@
         transform: translateX(0);
         }
     }
+
+    --animate-flip: flip 0.75s ease-in-out;
+
+    @keyframes flip {
+        0% {
+            transform: rotateX(0deg);
+        }
+        50% {
+            transform: rotateX(90deg);
+        }
+        100% {
+            transform: rotateX(0deg);
+        }
+    }
+
+    /* animation-delay {
+        100: "100ms",
+        200: "200ms",
+        300: "300ms",
+        400: "400ms",
+        500: "500ms",
+    } */
 }
