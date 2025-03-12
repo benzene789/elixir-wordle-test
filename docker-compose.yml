@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  backend:
+    build: ./wordle_backend
+    container_name: django_backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./wordle_backend:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=wordle_backend.settings
+
+  frontend:
+    build: ./wordle_frontend
+    container_name: vite_frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./wordle_frontend:/app
+      - /app/node_modules  # Avoid overwriting node_modules
+    depends_on:
+      - backend
