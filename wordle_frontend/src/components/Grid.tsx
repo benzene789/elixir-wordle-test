@@ -94,29 +94,29 @@ const Grid: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-1 sm:gap-2">
       {Array.from({ length: 6 }).map((_, rowIndex) => {
         const isActiveRow = rowIndex === guesses.length;
         const rowLetters = isActiveRow
           ? currentGuess.padEnd(5, " ")
           : guesses[rowIndex] || "";
-
+  
         return (
-          <div key={rowIndex} className={`flex gap-2 ${animateRow === rowIndex ? "motion-safe:animate-shake" : ""}`}>
+          <div key={rowIndex} className={`flex gap-1 sm:gap-2 ${animateRow === rowIndex ? "motion-safe:animate-shake" : ""}`}>
             {Array.from({ length: 5 }).map((_, colIndex) => {
               const letter = rowLetters[colIndex] || "";
               const colour = feedback[rowIndex]?.[colIndex];
               const isAnimated = animateCell?.row === rowIndex && animateCell?.col === colIndex;
               const isCompleted = completedCells[rowIndex]?.[colIndex];
-
+  
               return (
                 <div
                   key={colIndex}
-                  className={`w-24 h-24 flex items-center justify-center text-2xl font-bold border-2 border-gray-500
+                  className={`w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 flex items-center justify-center text-xl sm:text-2xl font-bold border-2 border-gray-500
                     ${isCompleted ? getCellColour(colour) : "bg-[#242424]"}
                     ${animateGuess(colour)} ${isAnimated ? "motion-safe:animate-pulse" : ""}`
                   }
-                  style={{ animationDelay: `${colIndex * 500}ms` }} // 500 ms delay between each letter
+                  style={{ animationDelay: `${colIndex * 300}ms` }} // 300 ms delay between each letter for mobile
                 >
                   {letter}
                 </div>

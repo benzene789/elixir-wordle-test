@@ -75,14 +75,14 @@ const Keyboard: React.FC = (): JSX.Element => {
   };
 
   return (
-    <div className="flex flex-col gap-2 mt-4">
+    <div className="flex flex-col gap-1 sm:gap-2 mt-4">
       {/* Top Row */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-1 sm:gap-2 justify-center">
         {topRow.map((key) => (
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
+            className={`px-2 py-1 sm:px-4 sm:py-2 text-sm sm:text-base text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
@@ -90,12 +90,12 @@ const Keyboard: React.FC = (): JSX.Element => {
       </div>
 
       {/* Middle Row */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-1 sm:gap-2 justify-center">
         {middleRow.map((key) => (
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
+            className={`px-2 py-1 sm:px-4 sm:py-2 text-sm sm:text-base text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
@@ -103,11 +103,11 @@ const Keyboard: React.FC = (): JSX.Element => {
       </div>
 
       {/* Bottom Row */}
-      <div className="flex gap-2 justify-center">
+      <div className="flex gap-1 sm:gap-2 justify-center">
         {/* Enter Key */}
         <button
           onClick={() => handleKeyPress("ENTER")}
-          className="px-6 py-2 bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 focus:outline-none"
+          className="px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base bg-blue-500 text-white font-bold rounded-lg hover:bg-blue-600 focus:outline-none"
         >
           Enter
         </button>
@@ -116,7 +116,7 @@ const Keyboard: React.FC = (): JSX.Element => {
           <button
             key={key}
             onClick={() => handleKeyPress(key)}
-            className={`px-4 py-2 text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
+            className={`px-2 py-1 sm:px-4 sm:py-2 text-sm sm:text-base text-black font-bold rounded-lg focus:outline-none ${getKeyColor(key)}`}
           >
             {key}
           </button>
@@ -125,7 +125,7 @@ const Keyboard: React.FC = (): JSX.Element => {
         {/* Backspace Key */}
         <button
           onClick={() => handleKeyPress("BACKSPACE")}
-          className="px-6 py-2 bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 focus:outline-none"
+          className="px-3 py-1 sm:px-6 sm:py-2 text-sm sm:text-base bg-red-500 text-white font-bold rounded-lg hover:bg-red-600 focus:outline-none"
         >
           ⌫
         </button>
